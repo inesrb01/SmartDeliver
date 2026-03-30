@@ -1,1 +1,84 @@
+1. Raffinement de l’architecture
 
+Dans cette phase, nous avons amélioré l’architecture du projet SmartDeliver afin de mieux structurer les responsabilités et les interactions entre les différentes classes.
+
+Le projet est organisé en plusieurs couches :
+
+Models : contient les entités du système comme Commande.
+Services : contient la logique métier.
+Repositories : gère l’accès aux données.
+Core : contient les éléments techniques globaux comme la gestion de connexion à la base de données.
+
+Cette séparation permet d’avoir un code plus clair, plus maintenable et plus facile à faire évoluer.
+
+2. Patrons de conception utilisés
+2.1 Singleton
+
+Le pattern Singleton a été utilisé dans la classe DbManager.
+
+L’objectif est de garantir qu’une seule instance de gestion de connexion à la base de données existe dans tout le système.
+Cela évite la création multiple de connexions inutiles et centralise la configuration de la base de données.
+
+2.2 Factory
+
+Le pattern Factory est utilisé pour créer les différents types de livraison (Standard et Express).
+
+Au lieu d’instancier directement les classes concrètes, nous passons par LivraisonFactory, qui décide quel objet créer selon le type demandé.
+
+Cela réduit le couplage et facilite l’ajout de nouveaux types de livraison dans le futur sans modifier le reste du code.
+
+2.3 State (Patron comportemental)
+
+Le pattern State a été implémenté pour gérer le statut d’une commande.
+
+Une commande peut être dans différents états :
+
+En attente
+En cours
+Livrée
+
+Chaque état est représenté par une classe différente qui implémente l’interface IEtatCommande.
+
+La transition entre les états se fait dynamiquement via la méthode Traiter().
+Cela évite d’utiliser plusieurs structures conditionnelles (if/else) et rend le code plus flexible et plus propre.
+
+2.4 Observer (Patron comportemental)
+
+Le pattern Observer a été utilisé pour notifier automatiquement le client lorsqu’un changement d’état survient.
+
+Lorsqu’une commande change de statut, tous les observateurs enregistrés sont informés via la méthode Update().
+
+Dans notre implémentation :
+
+Commande joue le rôle de sujet.
+ClientObserver joue le rôle d’observateur.
+
+Ce mécanisme améliore l’interaction entre les objets et rend le système plus réactif.
+
+3. Tests unitaires
+
+Des tests unitaires ont été ajoutés afin de vérifier le bon fonctionnement des nouvelles fonctionnalités, notamment :
+
+La transition correcte des états d’une commande.
+La logique comportementale associée au pattern State.
+
+Ces tests permettent de valider que les évolutions apportées n’introduisent pas d’erreurs et assurent la stabilité du système.
+
+4. Diagrammes UML mis à jour
+
+Les diagrammes UML ont été mis à jour afin de refléter les nouvelles modifications :
+
+Ajout des classes liées au pattern State.
+Ajout des interfaces et classes liées au pattern Observer.
+Mise à jour des relations entre Commande, IEtatCommande et IObserver.
+
+Ces diagrammes permettent de mieux visualiser l’architecture finale du système.
+
+5. Impact architectural
+
+L’utilisation des patrons de conception a permis :
+
+Une meilleure séparation des responsabilités.
+Une réduction du couplage entre les classes.
+Une architecture plus modulaire.
+Une meilleure évolutivité du système.
